@@ -1,1 +1,410 @@
+#include &lt;iostream&gt;
+#include &lt;string.h&gt;
+using namespace std;
+struct node
+{
+int num = 1;
+int fill = 0;
+char name[3][10];
+node *next;
+node *prev;
+};
+class hostel
+{
+node *header[3];
+node *cn;
 
+public:
+hostel()
+{
+for (int i = 0; i &lt; 3; i++)
+header[i] = NULL;
+}
+void create()
+{
+for (int i = 0; i &lt; 3; i++)
+{
+for (int j = 0; j &lt; 9; j++)
+{
+node *nn = new node;
+
+nn-&gt;next = NULL;
+nn-&gt;prev = NULL;
+if (header[i] == NULL)
+{
+header[i] = nn;
+nn-&gt;num = 1;
+}
+else
+{
+node *cn = header[i];
+while (cn-&gt;next != NULL)
+{
+cn = cn-&gt;next;
+}
+if (j == 3 || j == 5 || j == 7 || j == 8)
+{
+cn-&gt;num = 3;
+}
+if (j == 2 || j == 4 || j == 6)
+{
+cn-&gt;num = 2;
+}
+cn-&gt;next = nn;
+nn-&gt;prev = cn;
+}
+}
+}
+}
+void display()
+
+{
+int j = 0, k = 0, l = 0;
+for (int i = 0; i &lt; 48; i++)
+{
+cout &lt;&lt; &quot;--&quot;;
+}
+cout &lt;&lt; &quot;\n &quot;
+;
+for (int i = 1; i &lt; 4; i++)
+{
+cout &lt;&lt; &quot;| Floor number : &quot;&lt;&lt; i &lt;&lt; &quot; \t\t&quot;;
+}
+cout &lt;&lt; &quot;|\n&quot; ;
+for (int i = 0; i &lt; 48; i++)
+{
+cout &lt;&lt; &quot;--&quot;;
+}
+cn = header[j];
+node *sn = header[j + 1];
+node *tn = header[j + 2];
+cout &lt;&lt; &quot;\n &quot;;
+while (cn != NULL)
+{
+if (cn-&gt;fill != cn-&gt;num &amp;&amp; cn-&gt;num != 0)
+{
+j++;
+cout &lt;&lt; &quot;| room no : &quot;&lt;&lt; j;
+cout &lt;&lt; &quot;-&gt;Vacant cots-&gt;&quot;&lt;&lt; cn-&gt;num;
+}
+
+else
+{
+j++;
+cout &lt;&lt; &quot;| room no : &quot;&lt;&lt; j;
+cout &lt;&lt; &quot;-&gt;Present &quot;;
+}
+if (sn-&gt;fill != sn-&gt;num &amp;&amp; sn-&gt;num != 0)
+{
+k++;
+cout &lt;&lt; &quot;\t | room no : &quot;&lt;&lt; j;
+cout &lt;&lt; &quot;-&gt;Vacant cots-&gt;&quot;&lt;&lt; sn-&gt;num;
+}
+else
+{
+k++;
+cout &lt;&lt; &quot; \t | room no : &quot;&lt;&lt; j;
+cout &lt;&lt; &quot;-&gt;Present &quot;;
+}
+if (tn-&gt;fill != tn-&gt;num &amp;&amp; tn-&gt;num != 0)
+{
+l++;
+cout &lt;&lt; &quot;\t | room no : &quot;&lt;&lt; j;
+cout &lt;&lt; &quot;-&gt;Vacant cots-&gt;&quot;&lt;&lt; tn-&gt;num &lt;&lt; &quot;| &quot;;
+}
+else
+{
+l++;
+cout &lt;&lt; &quot;\t | room no : &quot;&lt;&lt; j;
+cout &lt;&lt; &quot;-&gt;Present &quot;&lt;&lt; &quot; | &quot;;
+
+}
+cout &lt;&lt; &quot; \n &quot;;
+for (int i = 0; i &lt; 48; i++)
+{
+cout &lt;&lt; &quot;--&quot; ;
+}
+cout &lt;&lt; &quot;\n &quot;;
+cn = cn-&gt;next;
+sn = sn-&gt;next;
+tn = tn-&gt;next;
+}
+}
+void book(int people)
+{
+int floor, room;
+cout &lt;&lt; &quot;\nEnter the floor number : &quot;;
+cin &gt;&gt; floor;
+try
+{
+if (floor &lt; 0 || floor &gt; 4)
+
+{
+throw(floor);
+}
+cn = header[floor - 1];
+
+cout &lt;&lt; &quot;\nEnter the room number : &quot;;
+cin &gt;&gt; room;
+try
+
+{
+
+if (room &lt; 0 || room &gt; 10)
+{
+throw(room);
+}
+else
+{
+int i = 1;
+while (i &lt; room)
+{
+cn = cn-&gt;next;
+i++;
+}
+if (cn-&gt;num &gt;= people)
+{
+cout &lt;&lt; &quot;\nroom is vacant you can apply for room&quot; ;
+
+int count = 0;
+while (cn-&gt;fill - 1 &lt;= cn-&gt;num)
+{
+
+cout &lt;&lt; &quot;\nEnter name &quot;&lt;&lt; cn -&gt; fill + 1 &lt;&lt; &quot; : &quot;;
+
+cin &gt;&gt; cn-&gt;name[cn-&gt;fill];
+count++;
+cn-&gt;fill++;
+if (count &gt;= people)
+{
+
+break;
+}
+}
+cn-&gt;num = cn-&gt;num - people;
+}
+
+else
+{
+cout &lt;&lt; &quot;\nroom is not vacant... SORRY !!!&quot;;
+}
+}
+}
+catch (int r)
+{
+cout &lt;&lt; &quot;\ninvalid room number : &quot;&lt;&lt; r;
+}
+}
+catch (int r)
+{
+cout &lt;&lt; &quot; \ninvalid floor number : &quot; &lt;&lt; r;
+}
+}
+void cancle(int check)
+{
+char namecheck[10];
+int flag = 0;
+int room, i = 1;
+try
+{
+
+if (check &lt; 0 || check &gt; 4)
+
+{
+throw(check);
+}
+else
+{
+cout &lt;&lt; &quot; Enter the room no : &quot;;
+cin &gt;&gt; room;
+try
+{
+if (room &lt; 0 || room &gt; 10)
+{
+throw(room);
+}
+else
+{
+cout &lt;&lt; &quot; Enter the name to be delete :&quot;;
+
+cin &gt;&gt; namecheck;
+cn = header[check - 1];
+while (i &lt; room)
+{
+cn = cn-&gt;next;
+i++;
+}
+i = 0;
+while (i &lt; 3)
+{
+
+if (!strcmp(namecheck, cn -&gt; name[i]))
+
+{
+flag = 1;
+break;
+i = 0;
+}
+else
+i++;
+}
+if (flag == 1 &amp;&amp; cn-&gt;fill != 0)
+{
+cout &lt;&lt; &quot;\nrecord deleted : &quot;&lt;&lt; cn -&gt; name[i];
+
+cn-&gt;name[i][0] =&#39;A&#39;;
+cn-&gt;name[i][1] =&#39;\0&#39;;
+cn-&gt;fill--;
+cn-&gt;num++;
+}
+else
+
+cout &lt;&lt; &quot;\nrecord not present &quot;;
+}
+}
+catch (int r)
+{
+cout &lt;&lt; &quot;\ninvalid room number : &quot; &lt;&lt; r;
+}
+
+}
+}
+
+catch (int r)
+
+{
+cout &lt;&lt; &quot; \n floor dosn&#39;t exist : &quot; &lt;&lt; r;
+}
+}
+void upgrade(int check)
+{
+char namecheck[10];
+int room, i = 1;
+try
+{
+if (check &lt; 0 || check &gt; 4)
+
+{
+throw(check);
+}
+else
+{
+cout &lt;&lt; &quot; Enter the room no : &quot;;
+cin &gt;&gt; room;
+try
+{
+if (room &lt; 0 || room &gt; 10)
+
+{
+
+throw(room);
+}
+else
+{
+cout &lt;&lt; &quot;Enter the name to be updated :&quot;;
+
+cin &gt;&gt; namecheck;
+cn = header[check - 1];
+while (i &lt; room)
+{
+cn = cn-&gt;next;
+i++;
+}
+i = 0;
+while (i &lt; 3)
+{
+if (!strcmp(namecheck, cn -&gt; name[i]))
+
+{
+cout &lt;&lt; &quot;\nenter updated name : &quot; ;
+
+cin &gt;&gt; cn-&gt;name[i];
+break;
+}
+else
+i++;
+}
+if (i &gt;= 3)
+cout &lt;&lt; &quot;record not found &quot;;
+
+else
+{
+cout &lt;&lt; &quot;\nrecord updated\nprevious name : &quot;&lt;&lt; namecheck &lt;&lt; &quot;\nupdated name : &quot;&lt;&lt;
+cn-&gt;name[i];
+}
+}
+}
+catch (int r)
+{
+cout &lt;&lt; &quot;\ninvalid room number : &quot;&lt;&lt; r;
+}
+}
+}
+
+catch (int r)
+
+{
+cout &lt;&lt; &quot;\n floor dosn&#39;t exist : &quot;&lt;&lt; r;
+}
+}
+};
+int main()
+{
+
+hostel obj;
+int key;
+char ch;
+int floorcheck;
+obj.create();
+
+do
+{
+cout &lt;&lt; &quot;\n1.Book a room for 1 person\n2.Book a room for 2person\n3.Book a room for 3
+person\n4.Display the current status of rooms\n5.cancle a cot\n6.upgrade&quot;&lt;&lt; endl;
+cout &lt;&lt; &quot; Enter your choice : &quot; ;
+cin &gt;&gt; key;
+switch (key)
+{
+case 1:
+{
+obj.book(1);
+break;
+}
+case 2:
+{
+obj.book(2);
+break;
+}
+case 3:
+{
+obj.book(3);
+break;
+}
+case 4:
+{
+obj.display();
+break;
+}
+case 5:
+
+{
+cout &lt;&lt; &quot;Enter floor number : &quot;;
+cin &gt;&gt; floorcheck;
+obj.cancle(floorcheck);
+break;
+}
+case 6:
+{
+cout &lt;&lt; &quot;Enter floor number : &quot;;
+cin &gt;&gt; floorcheck;
+obj.upgrade(floorcheck);
+break;
+}
+
+default:
+cout &lt;&lt; &quot;\nInvalid choice &quot;;
+}
+cout &lt;&lt; &quot;\nDo you want to continue(Y / N) &quot;;
+cin &gt;&gt; ch;
+} while (ch ==&#39;Y&#39;|| ch ==&#39;y&#39;);
+}
